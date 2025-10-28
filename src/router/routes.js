@@ -1,12 +1,19 @@
 const routes = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/login',
+    component: () => import('pages/LoginPage.vue')
+  },
+  {
+    path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LoginPage.vue') }
+      { path: 'home', component: () => import('pages/HomePage.vue') }
     ]
   },
-
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')

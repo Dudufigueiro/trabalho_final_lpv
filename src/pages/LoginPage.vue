@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center bg-grey-2">
+  <q-layout view="lHh Lpr lFf" class="bg-grey-2 flex flex-center">
     <q-card class="q-pa-lg shadow-2 rounded-borders" style="width: 360px; max-width: 90vw;">
       <div class="text-center q-mb-md">
         <div class="text-subtitle2">BEM VINDO!</div>
@@ -50,7 +50,7 @@
         </div>
       </q-form>
     </q-card>
-  </q-page>
+  </q-layout>
 </template>
 
 <script setup>
@@ -64,8 +64,7 @@ const lembrar = ref(false)
 
 const login = () => {
   if (email.value && senha.value) {
-    console.log('Login realizado com:', email.value, senha.value)
-    router.push('/home')
+    router.push('/app/home')
   } else {
     alert('Por favor, preencha o email e a senha.')
   }
