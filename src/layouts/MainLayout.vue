@@ -83,9 +83,9 @@ const toggleDrawer = () => { drawer.value = !drawer.value }
 
 const menuItems = [
   { label: 'Início',   icon: 'home',     to: '/app/home' },
-  { label: 'Clientes', icon: 'groups',       to: '/clientes' },
-  { label: 'Produtos', icon: 'inventory_2',  to: '/produtos' },
-  { label: 'Vendas',   icon: 'attach_money', to: '/vendas' },
+  { label: 'Clientes', icon: 'groups',       to: '/app/clientes' },
+  { label: 'Produtos', icon: 'inventory_2',  to: '/app/produtos' },
+  { label: 'Vendas',   icon: 'attach_money', to: '/app/vendas' },
 ]
 </script>
 
