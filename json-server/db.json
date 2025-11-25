@@ -17,6 +17,33 @@
       "id": "86ef"
     }
   ],
-  "produtos": [],
-  "vendas": []
+  "produtos": [
+    {
+      "codigo": "1111",
+      "nome": "Mouse",
+      "quantidade": 5,
+      "preco": 13,
+      "categoria": "Vestuário",
+      "id": "68d8"
+    }
+  ],
+  "vendas": [],
+  "categorias": [
+    {
+      "id": 1,
+      "nome": "Eletrônicos"
+    },
+    {
+      "id": 2,
+      "nome": "Periféricos"
+    },
+    {
+      "id": 3,
+      "nome": "Acessórios"
+    },
+    {
+      "id": 4,
+      "nome": "Vestuário"
+    }
+  ]
 }

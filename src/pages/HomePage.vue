@@ -34,18 +34,12 @@
 import { ref, onMounted } from 'vue'
 import { api } from 'boot/axios'
 
-// ------------------------------------------
-// CARDS
-// ------------------------------------------
 const cards = ref([
   { label: 'Total de Clientes', value: '—', icon: 'group' },
   { label: 'Total de Vendas', value: '—', icon: 'shopping_cart' },
   { label: 'Total de Vendas (R$)', value: '—', icon: 'attach_money' },
 ])
 
-// ------------------------------------------
-// TABELA DE PRODUTOS MAIS VENDIDOS
-// ------------------------------------------
 const colunas = [
   { name: 'codigo', label: 'Código', field: 'codigo', align: 'left' },
   { name: 'produto', label: 'Produto', field: 'produto', align: 'left' },
@@ -56,48 +50,35 @@ const colunas = [
 
 const produtos = ref([])
 
-// ------------------------------------------
-// CARREGAR DADOS DO JSON SERVER
-// ------------------------------------------
 const carregarDashboard = async () => {
   try {
-    // 🔹 Buscar Clientes
+
     const clientesResp = await api.get('/clientes')
     const clientes = clientesResp.data
 
-    // 🔹 Buscar Vendas
     const vendasResp = await api.get('/vendas')
     const vendas = vendasResp.data
 
-    // 🔹 Buscar Produtos Mais Vendidos (caso tenha no db.json)
     let produtosResp = []
     try {
       produtosResp = (await api.get('/produtos')).data
     } catch {
-      produtosResp = [] // ignore se não existir rota ainda
+      produtosResp = []
     }
 
-    // ------------------------------------------
-    // Atualizar Cards
-    // ------------------------------------------
-    cards.value[0].value = clientes.length // total de clientes
-    cards.value[1].value = vendas.length   // total de vendas
+    cards.value[0].value = clientes.length
+    cards.value[1].value = vendas.length
 
-    // total de vendas em dinheiro (se campo existir)
     const totalValor = vendas.reduce((soma, v) => soma + (v.valorTotal || 0), 0)
     cards.value[2].value = 'R$ ' + totalValor.toLocaleString('pt-BR')
 
-    // ------------------------------------------
-    // Atualizar Tabela de Produtos
-    // ------------------------------------------
-    produtos.value = produtosResp // lista produtos do JSON Server
+    produtos.value = produtosResp
 
   } catch (erro) {
     console.error("Erro carregando dashboard:", erro)
   }
 }
 
-// executar ao abrir
 onMounted(() => {
   carregarDashboard()
 })
