@@ -12,7 +12,9 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: 'home', component: () => import('pages/HomePage.vue') },
-      { path: 'clientes', component: () => import('pages/ClientesPage.vue') }
+      { path: 'clientes', component: () => import('pages/ClientesPage.vue') },
+      { path: 'produtos', component: () => import('pages/ProdutosPage.vue') },
+      { path: 'vendas', component: () => import('pages/VendasPage.vue') }
     ]
   },
   {
