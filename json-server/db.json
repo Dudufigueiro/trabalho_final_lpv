@@ -7,6 +7,16 @@
       "email": "chairemo@gmail.com",
       "telefone": "(49) 8888-8888",
       "id": "5d0a"
+    },
+    {
+      "data": "2025-11-18",
+      "codigo": "6969",
+      "nome": "Aloisio",
+      "email": "rinço@gmail.com",
+      "telefone": "(49) 9999-9999",
+      "id": "86ef"
     }
-  ]
+  ],
+  "produtos": [],
+  "vendas": []
 }

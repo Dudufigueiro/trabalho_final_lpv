@@ -70,13 +70,6 @@ const login = () => {
   }
 }
 
-const recuperarSenha = () => {
-  alert('Função de recuperação de senha em desenvolvimento.')
-}
-
-const cadastro = () => {
-  router.push('/cadastro')
-}
 </script>
 
 <style scoped>

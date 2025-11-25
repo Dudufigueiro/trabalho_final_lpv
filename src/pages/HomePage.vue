@@ -31,14 +31,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { api } from 'boot/axios'
 
-const cards = [
-  { label: 'Total de Clientes', value: '5,423', icon: 'group' },
-  { label: 'Total de Vendas', value: '1,893', icon: 'shopping_cart' },
-  { label: 'Total de Vendas (R$)', value: '189', icon: 'monitor' },
-]
+// ------------------------------------------
+// CARDS
+// ------------------------------------------
+const cards = ref([
+  { label: 'Total de Clientes', value: '—', icon: 'group' },
+  { label: 'Total de Vendas', value: '—', icon: 'shopping_cart' },
+  { label: 'Total de Vendas (R$)', value: '—', icon: 'attach_money' },
+])
 
+// ------------------------------------------
+// TABELA DE PRODUTOS MAIS VENDIDOS
+// ------------------------------------------
 const colunas = [
   { name: 'codigo', label: 'Código', field: 'codigo', align: 'left' },
   { name: 'produto', label: 'Produto', field: 'produto', align: 'left' },
@@ -47,13 +54,53 @@ const colunas = [
   { name: 'valorTotal', label: 'Valor Total', field: 'valorTotal', align: 'right' },
 ]
 
-const produtos = ref([
-  { codigo: '101', produto: 'Camiseta Casual', quantidade: 150, categoria: 'Vestuário', valorTotal: 'R$ 7.500' },
-  { codigo: '102', produto: 'Calça Jeans', quantidade: 120, categoria: 'Vestuário', valorTotal: 'R$ 6.000' },
-  { codigo: '103', produto: 'Tênis Esportivo', quantidade: 80, categoria: 'Calçados', valorTotal: 'R$ 4.000' },
-  { codigo: '104', produto: 'Boné', quantidade: 200, categoria: 'Acessórios', valorTotal: 'R$ 2.000' },
-  { codigo: '105', produto: 'Mochila', quantidade: 50, categoria: 'Acessórios', valorTotal: 'R$ 2.500' },
-])
+const produtos = ref([])
+
+// ------------------------------------------
+// CARREGAR DADOS DO JSON SERVER
+// ------------------------------------------
+const carregarDashboard = async () => {
+  try {
+    // 🔹 Buscar Clientes
+    const clientesResp = await api.get('/clientes')
+    const clientes = clientesResp.data
+
+    // 🔹 Buscar Vendas
+    const vendasResp = await api.get('/vendas')
+    const vendas = vendasResp.data
+
+    // 🔹 Buscar Produtos Mais Vendidos (caso tenha no db.json)
+    let produtosResp = []
+    try {
+      produtosResp = (await api.get('/produtos')).data
+    } catch {
+      produtosResp = [] // ignore se não existir rota ainda
+    }
+
+    // ------------------------------------------
+    // Atualizar Cards
+    // ------------------------------------------
+    cards.value[0].value = clientes.length // total de clientes
+    cards.value[1].value = vendas.length   // total de vendas
+
+    // total de vendas em dinheiro (se campo existir)
+    const totalValor = vendas.reduce((soma, v) => soma + (v.valorTotal || 0), 0)
+    cards.value[2].value = 'R$ ' + totalValor.toLocaleString('pt-BR')
+
+    // ------------------------------------------
+    // Atualizar Tabela de Produtos
+    // ------------------------------------------
+    produtos.value = produtosResp // lista produtos do JSON Server
+
+  } catch (erro) {
+    console.error("Erro carregando dashboard:", erro)
+  }
+}
+
+// executar ao abrir
+onMounted(() => {
+  carregarDashboard()
+})
 </script>
 
 <style scoped>
