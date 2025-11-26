@@ -52,16 +52,15 @@ const produtos = ref([])
 
 const carregarDashboard = async () => {
   try {
-
     const clientesResp = await api.get('/clientes')
-    const clientes = clientesResp.data
+    const clientes = clientesResp.data || []
 
     const vendasResp = await api.get('/vendas')
-    const vendas = vendasResp.data
+    const vendas = vendasResp.data || []
 
     let produtosResp = []
     try {
-      produtosResp = (await api.get('/produtos')).data
+      produtosResp = (await api.get('/produtos')).data || []
     } catch {
       produtosResp = []
     }
@@ -69,19 +68,65 @@ const carregarDashboard = async () => {
     cards.value[0].value = clientes.length
     cards.value[1].value = vendas.length
 
-    const totalValor = vendas.reduce((soma, v) => soma + (v.valorTotal || 0), 0)
-    cards.value[2].value = 'R$ ' + totalValor.toLocaleString('pt-BR')
+    const totalValorVendas = vendas.reduce(
+      (soma, v) => soma + Number(v.valorTotal || 0),
+      0
+    )
+    cards.value[2].value =
+      'R$ ' +
+      totalValorVendas.toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
-    produtos.value = produtosResp
+    const mapaProdutos = new Map()
+
+    vendas.forEach(venda => {
+      ;(venda.itens || []).forEach(item => {
+        const idProd = item.produtoId
+        if (!idProd) return
+
+        const qtd = Number(item.quantidade || 0)
+        const preco = Number(item.precoUnitario || 0)
+        const subtotal = qtd * preco
+
+        if (!mapaProdutos.has(idProd)) {
+          mapaProdutos.set(idProd, {
+            produtoId: idProd,
+            quantidade: 0,
+            valorTotal: 0
+          })
+        }
+
+        const agg = mapaProdutos.get(idProd)
+        agg.quantidade += qtd
+        agg.valorTotal += subtotal
+      })
+    })
+
+    const ranking = Array.from(mapaProdutos.values())
+      .map(agg => {
+        const prod = produtosResp.find(p => p.id === agg.produtoId)
+        return {
+          codigo: prod?.codigo ?? agg.produtoId,
+          produto: prod?.nome ?? `Produto #${agg.produtoId}`,
+          quantidade: agg.quantidade,
+          categoria: prod?.categoria ?? '—',
+          valorTotal:
+            'R$ ' +
+            agg.valorTotal.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2
+            })
+        }
+      })
+      .sort((a, b) => b.quantidade - a.quantidade) // ordena do mais vendido pro menos vendido
+      .slice(0, 5) // pega só top 5
+
+    produtos.value = ranking
 
   } catch (erro) {
-    console.error("Erro carregando dashboard:", erro)
+    console.error('Erro carregando dashboard:', erro)
   }
 }
 
-onMounted(() => {
-  carregarDashboard()
-})
+onMounted(carregarDashboard)
 </script>
 
 <style scoped>

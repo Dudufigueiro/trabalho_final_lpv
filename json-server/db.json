@@ -76,33 +76,47 @@
         }
       ],
       "valorTotal": 37
+    },
+    {
+      "data": "2025-11-22",
+      "clienteId": "5d0a",
+      "vendedorId": "1",
+      "itens": [
+        {
+          "produtoId": "2c22",
+          "quantidade": 21,
+          "precoUnitario": 12
+        }
+      ],
+      "valorTotal": 252,
+      "id": "7d88"
     }
   ],
   "categorias": [
     {
-      "id": 1,
+      "id": "1",
       "nome": "Eletrônicos"
     },
     {
-      "id": 2,
+      "id": "2",
       "nome": "Periféricos"
     },
     {
-      "id": 3,
+      "id": "3",
       "nome": "Acessórios"
     },
     {
-      "id": 4,
+      "id": "4",
       "nome": "Vestuário"
     }
   ],
   "vendedores": [
     {
-      "id": 1,
+      "id": "1",
       "nome": "Ana Souza"
     },
     {
-      "id": 2,
+      "id": "2",
       "nome": "Pedro Santos"
     }
   ]
