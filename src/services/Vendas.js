@@ -1,4 +1,3 @@
-// src/services/Vendas.js
 import { api } from 'boot/axios'
 
 export const VendasService = {

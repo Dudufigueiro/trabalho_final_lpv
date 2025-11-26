@@ -13,7 +13,7 @@
     </div>
 
     <q-table
-      :rows="vendasComNomes"
+      :rows="vendasPaginadas"
       :columns="colunas"
       row-key="id"
       flat
@@ -43,8 +43,30 @@
       </template>
 
       <template #bottom>
-        <div class="text-caption text-bold q-pa-sm">
-          Mostrando 1 até {{ vendasComNomes.length }} de {{ vendasComNomes.length }} Registros
+        <div class="row items-center justify-between full-width q-pa-sm">
+          <div class="text-caption text-bold">
+            Mostrando {{ rangeInicio }} até {{ rangeFim }} de {{ vendasComNomes.length }} Registros
+          </div>
+
+          <div class="row items-center q-gutter-xs">
+            <q-btn
+              dense
+              flat
+              icon="chevron_left"
+              :disable="pagina === 1"
+              @click="pagina--"
+            />
+            <div class="text-caption">
+              Página {{ pagina }} de {{ totalPaginas }}
+            </div>
+            <q-btn
+              dense
+              flat
+              icon="chevron_right"
+              :disable="pagina === totalPaginas"
+              @click="pagina++"
+            />
+          </div>
         </div>
       </template>
     </q-table>
@@ -287,7 +309,7 @@ const colunas = [
   { name: 'id', label: 'ID da Venda', align: 'left', field: 'id' },
   { name: 'data', label: 'Data da Venda', align: 'center', field: 'data' },
   { name: 'cliente', label: 'Nome do Cliente', align: 'center', field: 'clienteNome' },
-  { name: 'valor', label: 'Valor Total', align: 'center', field: 'valorTotal', format: v => formatMoney(v)},
+  { name: 'valor', label: 'Valor Total', align: 'center', field: 'valorTotal', format: v => formatMoney(v) },
   { name: 'vendedor', label: 'Vendedor', align: 'center', field: 'vendedorNome' },
   { name: 'acoes', label: 'Ações', align: 'center' }
 ]
@@ -319,6 +341,28 @@ const vendasComNomes = computed(() =>
     clienteNome: nomeCliente(v.clienteId),
     vendedorNome: nomeVendedor(v.vendedorId)
   }))
+)
+
+const pagina = ref(1)
+const linhasPorPagina = 5
+
+const totalPaginas = computed(() => {
+  const total = vendasComNomes.value.length
+  return total ? Math.ceil(total / linhasPorPagina) : 1
+})
+
+const vendasPaginadas = computed(() => {
+  const inicio = (pagina.value - 1) * linhasPorPagina
+  const fim = inicio + linhasPorPagina
+  return vendasComNomes.value.slice(inicio, fim)
+})
+
+const rangeInicio = computed(() =>
+  vendasComNomes.value.length ? (pagina.value - 1) * linhasPorPagina + 1 : 0
+)
+
+const rangeFim = computed(() =>
+  Math.min(pagina.value * linhasPorPagina, vendasComNomes.value.length)
 )
 
 const total = computed(() =>
@@ -424,6 +468,7 @@ const salvarVenda = async () => {
     } else {
       await vendasStore.adicionarVenda(payload)
       Notify.create({ type: 'positive', message: 'Venda cadastrada!' })
+      pagina.value = totalPaginas.value
     }
   } catch (e) {
     console.error(e)
@@ -455,6 +500,10 @@ const excluirVenda = async vendaRow => {
   try {
     await vendasStore.removerVenda(vendaRow.id)
     Notify.create({ type: 'positive', message: 'Venda excluída!' })
+
+    if (vendasPaginadas.value.length === 0 && pagina.value > 1) {
+      pagina.value--
+    }
   } catch {
     Notify.create({ type: 'negative', message: 'Erro ao excluir venda.' })
   }

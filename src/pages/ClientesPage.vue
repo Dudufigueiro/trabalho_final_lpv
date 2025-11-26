@@ -15,7 +15,7 @@
     </div>
 
     <q-table
-      :rows="clientes"
+      :rows="clientesPaginados"
       :columns="colunas"
       row-key="id"
       flat
@@ -43,8 +43,30 @@
       </template>
 
       <template v-slot:bottom>
-        <div class="text-caption text-bold q-pa-sm">
-          Mostrando 1 até {{ clientes.length }} de {{ clientes.length }} Registros
+        <div class="row items-center justify-between full-width q-pa-sm">
+          <div class="text-caption text-bold">
+            Mostrando {{ rangeInicio }} até {{ rangeFim }} de {{ clientes.length }} Registros
+          </div>
+
+          <div class="row items-center q-gutter-xs">
+            <q-btn
+              dense
+              flat
+              icon="chevron_left"
+              :disable="pagina === 1"
+              @click="pagina--"
+            />
+            <div class="text-caption">
+              Página {{ pagina }} de {{ totalPaginas }}
+            </div>
+            <q-btn
+              dense
+              flat
+              icon="chevron_right"
+              :disable="pagina === totalPaginas"
+              @click="pagina++"
+            />
+          </div>
         </div>
       </template>
     </q-table>
@@ -148,6 +170,28 @@ const novoCliente = ref({
   telefone: ''
 })
 
+const pagina = ref(1)
+const linhasPorPagina = 5
+
+const totalPaginas = computed(() => {
+  const total = clientes.value.length
+  return total ? Math.ceil(total / linhasPorPagina) : 1
+})
+
+const clientesPaginados = computed(() => {
+  const inicio = (pagina.value - 1) * linhasPorPagina
+  const fim = inicio + linhasPorPagina
+  return clientes.value.slice(inicio, fim)
+})
+
+const rangeInicio = computed(() =>
+  clientes.value.length ? (pagina.value - 1) * linhasPorPagina + 1 : 0
+)
+
+const rangeFim = computed(() =>
+  Math.min(pagina.value * linhasPorPagina, clientes.value.length)
+)
+
 onMounted(() => {
   clientesStore.carregarClientes()
 })
@@ -184,6 +228,7 @@ const salvarCliente = async () => {
       await clientesStore.atualizarCliente(novoCliente.value.id, payload)
     } else {
       await clientesStore.adicionarCliente(payload)
+      pagina.value = totalPaginas.value
     }
 
     modalAberta.value = false
@@ -207,6 +252,10 @@ const excluirCliente = async (cliente) => {
 
   try {
     await clientesStore.removerCliente(cliente.id)
+
+    if (clientesPaginados.value.length === 0 && pagina.value > 1) {
+      pagina.value--
+    }
   } catch (error) {
     console.error('Erro ao excluir cliente:', error)
     alert('Erro ao excluir cliente.')

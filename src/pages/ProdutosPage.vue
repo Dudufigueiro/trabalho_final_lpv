@@ -3,28 +3,69 @@
     <div class="text-h5 q-mb-lg"><b>Listagem de Produtos</b></div>
 
     <div class="row justify-end q-mb-md">
-      <q-btn label="Adicionar Produto" color="primary" unelevated rounded @click="abrirModal" />
+      <q-btn
+        label="Adicionar Produto"
+        color="primary"
+        unelevated
+        rounded
+        @click="abrirModal"
+      />
     </div>
 
     <q-table
-      :rows="produtos"
+      :rows="produtosPaginados"
       :columns="colunas"
       row-key="id"
-      flat bordered
+      flat
+      bordered
       class="shadow-1"
       :loading="loading"
       loading-label="Carregando produtos..."
     >
       <template #body-cell-acoes="props">
         <q-td class="text-center">
-          <q-btn flat size="sm" color="primary" label="Editar" @click="editarProduto(props.row)" />
-          <q-btn flat size="sm" color="negative" label="Excluir" @click="excluirProduto(props.row)" />
+          <q-btn
+            flat
+            size="sm"
+            color="primary"
+            label="Editar"
+            @click="editarProduto(props.row)"
+          />
+          <q-btn
+            flat
+            size="sm"
+            color="negative"
+            label="Excluir"
+            @click="excluirProduto(props.row)"
+          />
         </q-td>
       </template>
 
       <template #bottom>
-        <div class="text-caption text-bold q-pa-sm">
-          Mostrando 1 até {{ produtos.length }} de {{ produtos.length }} Registros
+        <div class="row items-center justify-between full-width q-pa-sm">
+          <div class="text-caption text-bold">
+            Mostrando {{ rangeInicio }} até {{ rangeFim }} de {{ produtos.length }} Registros
+          </div>
+
+          <div class="row items-center q-gutter-xs">
+            <q-btn
+              dense
+              flat
+              icon="chevron_left"
+              :disable="pagina === 1"
+              @click="pagina--"
+            />
+            <div class="text-caption">
+              Página {{ pagina }} de {{ totalPaginas }}
+            </div>
+            <q-btn
+              dense
+              flat
+              icon="chevron_right"
+              :disable="pagina === totalPaginas"
+              @click="pagina++"
+            />
+          </div>
         </div>
       </template>
     </q-table>
@@ -152,6 +193,28 @@ const colunas = [
   { name: 'acoes', label: 'Ações', align: 'center' }
 ]
 
+const pagina = ref(1)
+const linhasPorPagina = 5
+
+const totalPaginas = computed(() => {
+  const total = produtos.value.length
+  return total ? Math.ceil(total / linhasPorPagina) : 1
+})
+
+const produtosPaginados = computed(() => {
+  const inicio = (pagina.value - 1) * linhasPorPagina
+  const fim = inicio + linhasPorPagina
+  return produtos.value.slice(inicio, fim)
+})
+
+const rangeInicio = computed(() =>
+  produtos.value.length ? (pagina.value - 1) * linhasPorPagina + 1 : 0
+)
+
+const rangeFim = computed(() =>
+  Math.min(pagina.value * linhasPorPagina, produtos.value.length)
+)
+
 const opcoesCategorias = computed(() =>
   categorias.value.map(c =>
     typeof c === 'string'
@@ -212,6 +275,7 @@ const salvarProduto = async () => {
     } else {
       await produtosStore.adicionarProduto(payload)
       Notify.create({ type: 'positive', message: 'Produto cadastrado!' })
+      pagina.value = totalPaginas.value
     }
   } catch (err) {
     console.error('Erro ao salvar produto:', err)
@@ -234,6 +298,10 @@ const excluirProduto = async produto => {
   try {
     await produtosStore.removerProduto(produto.id)
     Notify.create({ type: 'positive', message: 'Produto removido!' })
+
+    if (produtosPaginados.value.length === 0 && pagina.value > 1) {
+      pagina.value--
+    }
   } catch {
     Notify.create({ type: 'negative', message: 'Erro ao remover produto.' })
   }

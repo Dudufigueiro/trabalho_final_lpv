@@ -3,7 +3,7 @@
     {
       "data": "2025-11-12",
       "codigo": "1313",
-      "nome": "chairemooo",
+      "nome": "chairamos",
       "email": "chairemo@gmail.com",
       "telefone": "(49) 8888-8888",
       "id": "5d0a"
@@ -15,6 +15,46 @@
       "email": "rinço@gmail.com",
       "telefone": "(49) 9999-9999",
       "id": "86ef"
+    },
+    {
+      "id": "d70c",
+      "data": "2025-11-10",
+      "codigo": "5555",
+      "nome": "Eduardo",
+      "email": "eduardo@gmail.com",
+      "telefone": "(11) 1111-1111"
+    },
+    {
+      "id": "91f3",
+      "data": "2025-11-03",
+      "codigo": "2323",
+      "nome": "Guilhermo",
+      "email": "guilhermo@hotmail.com",
+      "telefone": "(22) 2222-2222"
+    },
+    {
+      "data": "2025-11-06",
+      "codigo": "3333",
+      "nome": "Alessandro",
+      "email": "alessandro@gmail.com",
+      "telefone": "(33) 3333-3333",
+      "id": "4bf5"
+    },
+    {
+      "id": "892f",
+      "data": "2025-11-06",
+      "codigo": "4444",
+      "nome": "Buda",
+      "email": "buda@outlook.com",
+      "telefone": "(44) 4444-4444"
+    },
+    {
+      "id": "a755",
+      "data": "2025-11-07",
+      "codigo": "2345",
+      "nome": "JP Galvão",
+      "email": "teste@gmail.com",
+      "telefone": "(23) 2323-2323"
     }
   ],
   "produtos": [
@@ -41,6 +81,30 @@
       "quantidade": 5,
       "preco": 5,
       "categoria": "Acessórios"
+    },
+    {
+      "id": "65f7",
+      "codigo": "1414",
+      "nome": "Teste",
+      "quantidade": 12,
+      "preco": 156,
+      "categoria": "Eletrônicos"
+    },
+    {
+      "id": "9a2b",
+      "codigo": "1090",
+      "nome": "Toalha",
+      "quantidade": 167,
+      "preco": 237,
+      "categoria": "Vestuário"
+    },
+    {
+      "id": "646f",
+      "codigo": "123",
+      "nome": "Camisa",
+      "quantidade": 9,
+      "preco": 57,
+      "categoria": "Vestuário"
     }
   ],
   "vendas": [
@@ -57,6 +121,76 @@
       ],
       "valorTotal": 252,
       "id": "7d88"
+    },
+    {
+      "id": "d0dc",
+      "data": "2025-11-23",
+      "clienteId": "5d0a",
+      "vendedorId": "1",
+      "itens": [
+        {
+          "produtoId": "0d84",
+          "quantidade": 1,
+          "precoUnitario": 5
+        }
+      ],
+      "valorTotal": 5
+    },
+    {
+      "data": "2025-11-11",
+      "clienteId": "d70c",
+      "vendedorId": "1",
+      "itens": [
+        {
+          "produtoId": "65f7",
+          "quantidade": 4,
+          "precoUnitario": 156
+        }
+      ],
+      "valorTotal": 624,
+      "id": "ee62"
+    },
+    {
+      "id": "8aaf",
+      "data": "2025-11-08",
+      "clienteId": "91f3",
+      "vendedorId": "1",
+      "itens": [
+        {
+          "produtoId": "646f",
+          "quantidade": 3,
+          "precoUnitario": 57
+        }
+      ],
+      "valorTotal": 171
+    },
+    {
+      "id": "062d",
+      "data": "2025-11-19",
+      "clienteId": "a755",
+      "vendedorId": "2",
+      "itens": [
+        {
+          "produtoId": "9a2b",
+          "quantidade": 2,
+          "precoUnitario": 237
+        }
+      ],
+      "valorTotal": 474
+    },
+    {
+      "id": "4dd3",
+      "data": "2025-11-21",
+      "clienteId": "892f",
+      "vendedorId": "2",
+      "itens": [
+        {
+          "produtoId": "68d8",
+          "quantidade": 12,
+          "precoUnitario": 13
+        }
+      ],
+      "valorTotal": 156
     }
   ],
   "categorias": [
