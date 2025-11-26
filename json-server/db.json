@@ -45,42 +45,9 @@
   ],
   "vendas": [
     {
-      "data": "2025-11-19",
-      "clienteId": "5d0a",
-      "vendedorId": 1,
-      "itens": [
-        {
-          "produtoId": "68d8",
-          "quantidade": 2,
-          "precoUnitario": 13
-        }
-      ],
-      "valorTotal": 26,
-      "id": "a8f3"
-    },
-    {
-      "id": "193c",
-      "data": "2025-11-21",
-      "clienteId": "86ef",
-      "vendedorId": 2,
-      "itens": [
-        {
-          "produtoId": "2c22",
-          "quantidade": 2,
-          "precoUnitario": 12
-        },
-        {
-          "produtoId": "68d8",
-          "quantidade": 1,
-          "precoUnitario": 13
-        }
-      ],
-      "valorTotal": 37
-    },
-    {
       "data": "2025-11-22",
       "clienteId": "5d0a",
-      "vendedorId": "1",
+      "vendedorId": "2",
       "itens": [
         {
           "produtoId": "2c22",

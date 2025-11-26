@@ -31,11 +31,15 @@
       </template>
 
       <template #body-cell-cliente="props">
-        <q-td><span class="texto-link">{{ props.row.clienteNome }}</span></q-td>
+        <q-td class="text-center">
+          <span class="texto-link">{{ props.row.clienteNome }}</span>
+        </q-td>
       </template>
 
       <template #body-cell-vendedor="props">
-        <q-td><span class="texto-link">{{ props.row.vendedorNome }}</span></q-td>
+        <q-td class="text-center">
+          <span class="texto-link">{{ props.row.vendedorNome }}</span>
+        </q-td>
       </template>
 
       <template #bottom>
